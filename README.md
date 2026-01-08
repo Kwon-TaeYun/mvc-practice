@@ -1,4 +1,4 @@
-1. 1차 API 문서:
+#1. 1차 API 문서:
 Backend → Frontend 
 
 ## 📌 1. 접속자 수 조회
@@ -218,191 +218,111 @@ Backend → Frontend
 - Word:: [API문서_코멘토_권태윤_260103.docx](https://github.com/user-attachments/files/24415496/API._._._260103.docx)
 - notion:: https://www.notion.so/API-2dd98cfebe1e80d68de2cbf9e0749274?source=copy_link
 
-2. RestAPI ?
-2-1. HTTP 통신이란?
+# 2. REST API
 
-1️⃣ HTTP란?
-HTTP (HyperText Transfer Protocol) 는
-👉 클라이언트(브라우저, 앱) 가
-👉 서버(웹 서버, API 서버) 에
-요청(Request)을 보내고, 서버가 응답(Response)을 주는 규칙(프로토콜) 입니다.
+## 2-1. HTTP 통신이란?
 
-2️⃣ HTTP 통신 구조: 요청 → 응답 구조.
+HTTP(HyperText Transfer Protocol)는 클라이언트(브라우저, 앱)가 서버(웹 서버, API 서버)에 요청(Request)을 보내고 응답(Response)을 받기 위한 통신 규칙(프로토콜)이다.
 
-📤 요청(Request): 클라이언트가 서버에 보내는 것
+### HTTP 통신 구조
+HTTP는 요청(Request) → 응답(Response) 구조로 동작한다.
+
+#### 요청(Request)
+클라이언트가 서버에 보내는 데이터
 - 요청 메서드 (GET, POST 등)
 - URL
-- 헤더(Header)
-- 바디(Body, 선택)
+- Header
+- Body (선택)
 
 예시:
-GET /api/v1/boards/1 HTTP/1.1
-Host: example.com
-Authorization: Bearer xxx
+GET /api/v1/boards/1 HTTP/1.1  
+Host: example.com  
+Authorization: Bearer xxx  
 
-📥 응답(Response): 서버가 클라이언트에 보내는 것
+#### 응답(Response)
+서버가 클라이언트에 반환하는 데이터
 - 상태 코드 (200, 404 등)
-- 헤더(Header)
-- 바디(Body)
+- Header
+- Body
 
 예시:
-HTTP/1.1 200 OK
-Content-Type: application/json
+HTTP/1.1 200 OK  
+Content-Type: application/json  
 
 {
   "id": 1,
   "title": "게시글 제목"
 }
 
-3️⃣ HTTP의 주요 특징
-✅ 무상태성 (Stateless)
+### HTTP의 주요 특징
+- 무상태성(Stateless): 서버는 이전 요청을 기억하지 않으며, 로그인 정보는 쿠키·세션·JWT로 보완한다.
+- 비연결성(Connectionless): 요청과 응답 후 연결을 종료하며, HTTP/1.1부터 Keep-Alive를 지원한다.
+- 텍스트 기반 통신: JSON, HTML 등 사람이 읽을 수 있는 형식이다.
 
-서버는 이전 요청을 기억하지 않음
+### HTTP 메서드
+- GET: 데이터 조회
+- POST: 데이터 생성
+- PUT: 데이터 전체 수정
+- PATCH: 데이터 일부 수정
+- DELETE: 데이터 삭제
 
-로그인 정보 → 쿠키, 세션, JWT로 보완
+### HTTP 상태 코드
+- 200: 성공
+- 201: 생성 성공
+- 400: 잘못된 요청
+- 401: 인증 필요
+- 403: 권한 없음
+- 404: 리소스 없음
+- 500: 서버 오류
 
-✅ 비연결성 (Connectionless)
+### HTTP vs HTTPS
+- HTTP: 평문 통신, 포트 80
+- HTTPS: SSL/TLS 적용 암호화 통신, 포트 443
+※ 실제 서비스에서는 HTTPS 사용이 필수이다.
 
-요청 1번 → 응답 1번 → 연결 종료
+### 백엔드 개발 관점에서의 HTTP
+- Spring Controller의 @GetMapping, @PostMapping
+- REST API 설계
+- JWT 인증 (Authorization Header)
+- Next.js ↔ Spring 서버 통신
 
-성능 개선을 위해 HTTP/1.1부터 Keep-Alive 사용
+## 2-2. 브라우저에 URL 입력 후 요청하여 서버에서 응답하는 과정
 
-✅ 텍스트 기반
+1. URL 입력  
+사용자가 브라우저 주소창에 다음과 같은 URL을 입력한다.  
+https://www.example.com/boards/1  
+브라우저는 프로토콜(https), 도메인(www.example.com), 경로(/boards/1)를 해석한다.
 
-사람이 읽을 수 있음 (JSON, HTML 등)
+2. DNS 조회 (Domain → IP)  
+브라우저 캐시, OS 캐시, 라우터 캐시를 확인한 뒤 ISP DNS 서버에 질의하여 IP 주소를 획득한다.  
+네트워크 통신은 IP 주소 기반으로 이루어진다.
 
-4️⃣ HTTP 메서드
-메서드	의미
-GET	데이터 조회
-POST	데이터 생성
-PUT	데이터 전체 수정
-PATCH	데이터 일부 수정
-DELETE	데이터 삭제
-5️⃣ HTTP 상태 코드
-코드	의미
-200	성공
-201	생성 성공
-400	잘못된 요청
-401	인증 필요
-403	권한 없음
-404	리소스 없음
-500	서버 오류
-6️⃣ HTTP vs HTTPS
-HTTP	HTTPS
-평문 통신	암호화 통신
-보안 취약	SSL/TLS 적용
-포트 80	포트 443
+3. TCP 연결 (3-way handshake)  
+클라이언트와 서버는 신뢰성 있는 연결을 위해 3-way handshake를 수행한다.  
+SYN → SYN+ACK → ACK 순서로 연결이 수립된다.
 
-👉 실제 서비스에서는 HTTPS 필수
+4. TLS 핸드셰이크 (HTTPS인 경우)  
+서버 인증서를 전달받아 검증하고 대칭키를 생성하여 암호화 통신을 준비한다.  
+HTTP인 경우 해당 과정은 생략된다.
 
-7️⃣ 백엔드 개발 관점에서의 HTTP
+5. HTTP 요청 전송  
+브라우저는 서버로 HTTP 요청을 전송한다.  
+GET /boards/1 HTTP/1.1  
+Host: www.example.com  
 
-Spring Controller의 @GetMapping, @PostMapping
+6. 서버 내부 처리 (Spring 기준)  
+요청은 Web Server/WAS를 통해 수신된 후 Filter, Interceptor를 거쳐 Controller에 매핑된다.  
+Service 로직이 실행되고 DB 조회 후 응답 데이터가 생성된다.
 
-REST API 설계
+7. HTTP 응답 반환  
+서버는 처리 결과를 HTTP 응답으로 반환한다.
 
-JWT 인증 (Authorization 헤더)
+8. 브라우저 렌더링  
+브라우저는 HTML을 파싱해 DOM을 생성하고, CSSOM과 결합해 Render Tree를 만든다.  
+이후 Layout과 Paint 과정을 거쳐 화면에 출력한다.
 
-Next.js ↔ Spring 서버 통신
+9. 추가 리소스 요청  
+HTML에 포함된 CSS, JavaScript, Image 등에 대해 추가 HTTP 요청이 발생한다.
 
-2-2. 브라우저에 URL 입력 후 요청하여 서버에서 응답하는 과정
-1️⃣ URL 입력: 사용자가 브라우저 주소창에 입력
-
-https://www.example.com/boards/1
-
-브라우저는 다음을 해석합니다:
-- 프로토콜: https
-- 도메인: www.example.com
-- 경로: /boards/1
-
-2️⃣ DNS 조회 (Domain → IP): 브라우저는 도메인을 IP 주소로 바꿔야 합니다.
-- 브라우저 캐시 확인
-- OS 캐시 확인
-- 라우터 캐시 확인
-- ISP DNS 서버에 질의
-- 최종적으로 IP 획득 (예: 203.0.113.10)
-
-📌 이유: 네트워크 통신은 IP 주소로만 가능
-
-3️⃣ TCP 연결 (3-way handshake)
-- 서버 IP를 알게 되면 TCP 연결을 시도합니다.
-
-3-way handshake
-클라이언트 → 서버 : SYN
-서버 → 클라이언트 : SYN + ACK
-클라이언트 → 서버 : ACK
-
-👉 연결 완료
-
-4️⃣ TLS 핸드셰이크 (HTTPS인 경우)
-HTTPS라면 암호화 통신을 위한 추가 과정이 있습니다.
-
-서버 인증서 전달
-인증서 검증 (CA)
-대칭키 생성 및 공유
-이후부터 데이터는 암호화
-
-📌 HTTP면 이 과정은 없음
-
-5️⃣ HTTP 요청 전송
-브라우저가 서버로 HTTP 요청을 보냅니다.
-
-예시:
-GET /boards/1 HTTP/1.1
-Host: www.example.com
-User-Agent: Chrome
-Accept: text/html
-
-6️⃣ 서버 내부 처리
-서버에서 일어나는 일 (Spring 기준)
-
-요청 수신 (웹 서버 / WAS)
-
-필터 (JWT 인증, 보안 필터 등)
-
-인터셉터
-
-컨트롤러 매핑 (@GetMapping)
-
-서비스 로직 실행
-
-DB 조회
-
-응답 데이터 생성
-
-7️⃣ HTTP 응답 반환
-서버가 결과를 응답합니다.
-
-HTTP/1.1 200 OK
-Content-Type: text/html
-
-<html>...</html>
-
-
-또는
-
-Content-Type: application/json
-
-8️⃣ 브라우저 렌더링
-브라우저가 응답을 해석하여 화면에 표시
-
-HTML 파싱 → DOM 생성
-
-CSS 파싱 → CSSOM 생성
-
-DOM + CSSOM → Render Tree
-
-Layout (배치 계산)
-
-Paint (화면에 그림)
-
-9️⃣ 추가 요청 발생
-HTML 안에 포함된 리소스:
-- CSS
-- JS
-- 이미지
-
-👉 각각 추가 HTTP 요청 발생
-
-🔁 전체 흐름 한 줄 요약
-URL 입력 → DNS → TCP → TLS → HTTP 요청 → 서버 처리 → HTTP 응답 → 브라우저 렌더링
+전체 흐름 요약  
+URL 입력 → DNS 조회 → TCP 연결 → TLS 핸드셰이크 → HTTP 요청 → 서버 처리 → HTTP 응답 → 브라우저 렌더링

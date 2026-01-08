@@ -1,5 +1,4 @@
-#1. 1차 API 문서:
-Backend → Frontend 
+# 1. 1차 API 문서 
 
 ## 📌 1. 접속자 수 조회
 

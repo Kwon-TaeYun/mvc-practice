@@ -220,47 +220,32 @@ Backend → Frontend
 
 2. RestAPI ?
 2-1. HTTP 통신이란?
-1️⃣ HTTP란?
 
+1️⃣ HTTP란?
 HTTP (HyperText Transfer Protocol) 는
 👉 클라이언트(브라우저, 앱) 가
 👉 서버(웹 서버, API 서버) 에
 요청(Request)을 보내고, 서버가 응답(Response)을 주는 규칙(프로토콜) 입니다.
 
-2️⃣ HTTP 통신 구조
+2️⃣ HTTP 통신 구조: 요청 → 응답 구조.
 
-HTTP는 요청 → 응답 구조로 동작해요.
-
-📤 요청(Request)
-
-클라이언트가 서버에 보내는 것
-
-요청 메서드 (GET, POST 등)
-
-URL
-
-헤더(Header)
-
-바디(Body, 선택)
+📤 요청(Request): 클라이언트가 서버에 보내는 것
+- 요청 메서드 (GET, POST 등)
+- URL
+- 헤더(Header)
+- 바디(Body, 선택)
 
 예시:
-
 GET /api/v1/boards/1 HTTP/1.1
 Host: example.com
 Authorization: Bearer xxx
 
-📥 응답(Response)
-
-서버가 클라이언트에 보내는 것
-
-상태 코드 (200, 404 등)
-
-헤더(Header)
-
-바디(Body)
+📥 응답(Response): 서버가 클라이언트에 보내는 것
+- 상태 코드 (200, 404 등)
+- 헤더(Header)
+- 바디(Body)
 
 예시:
-
 HTTP/1.1 200 OK
 Content-Type: application/json
 
@@ -312,8 +297,6 @@ HTTP	HTTPS
 
 7️⃣ 백엔드 개발 관점에서의 HTTP
 
-지금 하고 있는 것들이 전부 HTTP 통신이에요 👇
-
 Spring Controller의 @GetMapping, @PostMapping
 
 REST API 설계
@@ -323,78 +306,54 @@ JWT 인증 (Authorization 헤더)
 Next.js ↔ Spring 서버 통신
 
 2-2. 브라우저에 URL 입력 후 요청하여 서버에서 응답하는 과정
-1️⃣ URL 입력
-
-사용자가 브라우저 주소창에 입력
+1️⃣ URL 입력: 사용자가 브라우저 주소창에 입력
 
 https://www.example.com/boards/1
 
-
 브라우저는 다음을 해석합니다:
+- 프로토콜: https
+- 도메인: www.example.com
+- 경로: /boards/1
 
-프로토콜: https
-
-도메인: www.example.com
-
-경로: /boards/1
-
-2️⃣ DNS 조회 (Domain → IP)
-
-브라우저는 도메인을 IP 주소로 바꿔야 합니다.
-
-브라우저 캐시 확인
-
-OS 캐시 확인
-
-라우터 캐시 확인
-
-ISP DNS 서버에 질의
-
-최종적으로 IP 획득 (예: 203.0.113.10)
+2️⃣ DNS 조회 (Domain → IP): 브라우저는 도메인을 IP 주소로 바꿔야 합니다.
+- 브라우저 캐시 확인
+- OS 캐시 확인
+- 라우터 캐시 확인
+- ISP DNS 서버에 질의
+- 최종적으로 IP 획득 (예: 203.0.113.10)
 
 📌 이유: 네트워크 통신은 IP 주소로만 가능
 
 3️⃣ TCP 연결 (3-way handshake)
-
-서버 IP를 알게 되면 TCP 연결을 시도합니다.
+- 서버 IP를 알게 되면 TCP 연결을 시도합니다.
 
 3-way handshake
-
 클라이언트 → 서버 : SYN
-
 서버 → 클라이언트 : SYN + ACK
-
 클라이언트 → 서버 : ACK
 
 👉 연결 완료
 
 4️⃣ TLS 핸드셰이크 (HTTPS인 경우)
-
 HTTPS라면 암호화 통신을 위한 추가 과정이 있습니다.
 
 서버 인증서 전달
-
 인증서 검증 (CA)
-
 대칭키 생성 및 공유
-
 이후부터 데이터는 암호화
 
 📌 HTTP면 이 과정은 없음
 
 5️⃣ HTTP 요청 전송
-
 브라우저가 서버로 HTTP 요청을 보냅니다.
 
 예시:
-
 GET /boards/1 HTTP/1.1
 Host: www.example.com
 User-Agent: Chrome
 Accept: text/html
 
 6️⃣ 서버 내부 처리
-
 서버에서 일어나는 일 (Spring 기준)
 
 요청 수신 (웹 서버 / WAS)
@@ -412,7 +371,6 @@ DB 조회
 응답 데이터 생성
 
 7️⃣ HTTP 응답 반환
-
 서버가 결과를 응답합니다.
 
 HTTP/1.1 200 OK
@@ -426,7 +384,6 @@ Content-Type: text/html
 Content-Type: application/json
 
 8️⃣ 브라우저 렌더링
-
 브라우저가 응답을 해석하여 화면에 표시
 
 HTML 파싱 → DOM 생성
@@ -440,17 +397,12 @@ Layout (배치 계산)
 Paint (화면에 그림)
 
 9️⃣ 추가 요청 발생
-
 HTML 안에 포함된 리소스:
-
-CSS
-
-JS
-
-이미지
+- CSS
+- JS
+- 이미지
 
 👉 각각 추가 HTTP 요청 발생
 
 🔁 전체 흐름 한 줄 요약
-
 URL 입력 → DNS → TCP → TLS → HTTP 요청 → 서버 처리 → HTTP 응답 → 브라우저 렌더링
